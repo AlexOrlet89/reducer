@@ -12,7 +12,7 @@ const countReducer = (state, action) => {
     case 'DECREMENT':
       return state - 1;
     case 'RESET':
-      return state == 0;
+      return (state = 0);
     default:
       throw new Error(`Action type unsupported`);
   }
@@ -49,11 +49,11 @@ export default function Counter() {
   };
 
   const decrement = () => {
-    setCount((prevState) => prevState - 1);
+    dispatch({ type: 'DECREMENT' });
   };
 
   const reset = () => {
-    setCount(0);
+    dispatch({ type: 'RESET' });
   };
 
   return (
