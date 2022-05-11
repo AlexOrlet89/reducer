@@ -1,3 +1,4 @@
+import { useReducer } from 'react';
 import { useEffect, useState } from 'react';
 import styles from './Counter.css';
 
@@ -7,39 +8,61 @@ const colors = {
   red: 'rgb(239, 68, 68)',
 };
 
+const initialCount = { count: 0, color: colors.green };
+
+const countReducer = (state, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return { count: state.count + 1, color: state.color };
+    case 'DECREMENT':
+      return { count: state.count - 1, color: state.color };
+    case 'RESET':
+      return { count: 0, color: state.color };
+    case 'CHANGE_COLOR':
+      return {
+        count: state.count,
+        color: action.payload.color,
+      };
+    default:
+      throw new Error(`Action type unsupported`);
+  }
+};
+
 export default function Counter() {
-  const [count, setCount] = useState(0);
-  const [currentColor, setCurrentColor] = useState(colors.yellow);
+  // const [count, setCount] = useState(0);
+  const [count, dispatch] = useReducer(countReducer, initialCount);
+  // const [currentColor, setCurrentColor] = useState(colors.green);
+  // const [color, dispatch] = useReducer(colorReducer, initialColor);
 
   useEffect(() => {
-    if (count === 0) {
-      setCurrentColor(colors.yellow);
+    if (count.count === 0) {
+      dispatch({ type: 'CHANGE_COLOR', payload: { color: colors.yellow } });
     }
 
-    if (count > 0) {
-      setCurrentColor(colors.green);
+    if (count.count > 0) {
+      dispatch({ type: 'CHANGE_COLOR', payload: { color: colors.green } });
     }
 
-    if (count < 0) {
-      setCurrentColor(colors.red);
+    if (count.count < 0) {
+      dispatch({ type: 'CHANGE_COLOR', payload: { color: colors.red } });
     }
-  }, [count]);
+  }, [count.count]);
 
   const increment = () => {
-    setCount((prevState) => prevState + 1);
+    dispatch({ type: 'INCREMENT' });
   };
 
   const decrement = () => {
-    setCount((prevState) => prevState - 1);
+    dispatch({ type: 'DECREMENT' });
   };
 
   const reset = () => {
-    setCount(0);
+    dispatch({ type: 'RESET' });
   };
 
   return (
     <main className={styles.main}>
-      <h1 style={{ color: currentColor }}>{count}</h1>
+      <h1 style={{ color: count.color }}>{count.count}</h1>
       <div>
         <button
           type="button"
