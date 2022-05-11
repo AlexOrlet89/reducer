@@ -8,12 +8,11 @@ const colors = {
   red: 'rgb(239, 68, 68)',
 };
 
-const initialCount = { count: 10, color: colors.green };
+const initialCount = { count: 0, color: colors.green };
 
 const countReducer = (state, action) => {
   switch (action.type) {
     case 'INCREMENT':
-      console.log('increment', state);
       return { count: state.count + 1, color: state.color };
     case 'DECREMENT':
       return { count: state.count - 1, color: state.color };
@@ -34,8 +33,6 @@ export default function Counter() {
   const [count, dispatch] = useReducer(countReducer, initialCount);
   // const [currentColor, setCurrentColor] = useState(colors.green);
   // const [color, dispatch] = useReducer(colorReducer, initialColor);
-
-  console.log({ count });
 
   useEffect(() => {
     if (count.count === 0) {
